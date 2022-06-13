@@ -17,7 +17,7 @@ for dxf_file in os.listdir(EXPORT_DIR):
 
 # %% Specify .tir file name and main axis
 
-XSECS_FILE = DATA_DIR + "pod_and_wing.tri"
+XSECS_FILE = DATA_DIR + "cessna172_ydir.tri"
 NORMAL_AXIS = 'y'
 
 # %% XSec extractor
@@ -43,6 +43,10 @@ else:
         xsec_list.append(xsec)
 
 for i, xsec in enumerate(xsec_list):
+    
+    if np.size(xsec, 0) < 10:
+        continue
+    
     h_center_val = (np.max(xsec[:, 0]) -
                     np.min(xsec[:, 0]))/2 + np.min(xsec[:, 0])
     v_center_val = (np.max(xsec[:, 1]) -
@@ -53,12 +57,13 @@ for i, xsec in enumerate(xsec_list):
 
     angle_array = np.reshape(np.arctan2(
         cent_xsec_array[:, 1], cent_xsec_array[:, 0]), (int(np.size(xsec, 0)), 1))
-    
-    dist_array = np.reshape(np.sqrt(cent_xsec_array[:, 0]**2 + cent_xsec_array[:, 1]**2), (int(np.size(xsec, 0)), 1))
-    
-    
+
+    dist_array = np.reshape(np.sqrt(
+        cent_xsec_array[:, 0]**2 + cent_xsec_array[:, 1]**2), (int(np.size(xsec, 0)), 1))
+
     polar_array = np.hstack((cent_xsec_array, angle_array, dist_array))
-    sorted_xsec_array = polar_array[np.lexsort((polar_array[:, 3], polar_array[:, 2]))]
+    sorted_xsec_array = polar_array[np.lexsort(
+        (polar_array[:, 3], polar_array[:, 2]))]
 
     fig = plt.figure(dpi=DPI)
     ax = fig.add_subplot(111)
