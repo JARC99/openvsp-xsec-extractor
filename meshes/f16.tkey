@@ -1,4 +1,6 @@
 # VSP Tag Key File
 C:/Users/jaros/My Drive/Portable Software/OpenVSP/OpenVSP_XSecExtractor/meshes/f16.tri
-0
+2
 
+1,Fuselage_Surf0
+2,Canopy_Surf0
