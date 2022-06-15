@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pylab as plt
-import matplotlib.patches as mpatches
 import seaborn as sns
 import ezdxf
 import os
@@ -112,9 +111,6 @@ for i, xsec in enumerate(xsec_list):
     ax.grid(False)
     ax.axis(False)
     ax.axis('equal')
-    
-    # poly = mpatches.Polygon(sorted_xsec_array[:, :2])
-    # ax.add_patch(poly)
     
     plot_array = np.vstack((sorted_xsec_array, sorted_xsec_array[0, :]))
     ax.plot(plot_array[:, 0], plot_array[:, 1], alpha=1)
