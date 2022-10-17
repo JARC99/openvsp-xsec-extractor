@@ -20,10 +20,12 @@ for png_file in os.listdir(PNG_EXPORT_DIR):
 
 # %% Specify .tir file name and main axis
 
-XSECS_FILE = DATA_DIR + "pod_and_wing.tri"
-NORMAL_AXIS = 'y'
+XSECS_FILE = DATA_DIR + "piae_fuse.tri"
+NORMAL_AXIS = 'x'
+UNIT = "cm"
 
 MIN_POINTS = 5
+START_POS = 5
 
 # %% XSec extractor
 
@@ -70,15 +72,15 @@ for i, xsec in enumerate(xsec_list):
     ax = fig.add_subplot(111)
     ax.axis('equal')
     if NORMAL_AXIS == 'x':
-        ax.set_title("XSec_{0}, x = {1} m".format(
-            i, round(locs[i] - locs[0], 3)))
-        ax.set_xlabel("y, m")
-        ax.set_ylabel("z, m")
+        ax.set_title("XSec_{0}, x = {1} {2}".format(
+            i, round(locs[i] - locs[0] + START_POS, 3), UNIT))
+        ax.set_xlabel("y, {0}".format(UNIT))
+        ax.set_ylabel("z, {0}".format(UNIT))
     else:
-        ax.set_title("XSec {0}, y = {1} m".format(
-            i, round(locs[i] - locs[0], 3)))
-        ax.set_xlabel("x, m")
-        ax.set_ylabel("z, m")
+        ax.set_title("XSec {0}, y = {1} {2}".format(
+            i, round(locs[i] - locs[0] + START_POS, 3), UNIT))
+        ax.set_xlabel("x, {0}".format(UNIT))
+        ax.set_ylabel("z, {0}".format(UNIT))
 
     plot_array = np.vstack((sorted_xsec_array, sorted_xsec_array[0, :]))
     ax.plot(plot_array[:, 0], plot_array[:, 1], alpha=1)
