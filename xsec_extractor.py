@@ -5,7 +5,7 @@ import seaborn as sns
 import ezdxf
 import os
 
-DPI = 300
+DPI = 600
 COLORS = ["black", "darkblue", "darkred"]
 sns.set_theme(style="whitegrid", font="Palatino Linotype",
               context="paper", palette=COLORS)
@@ -25,7 +25,7 @@ NORMAL_AXIS = 'x'
 UNIT = "cm"
 
 MIN_POINTS = 5
-START_POS = 5
+START_POS = 4.48
 
 # %% XSec extractor
 
@@ -69,57 +69,57 @@ for i, xsec in enumerate(xsec_list):
 # %% Plot the XSecs
 
     fig = plt.figure(dpi=DPI)
-    ax = fig.add_subplot(111)
-    ax.axis('equal')
-    if NORMAL_AXIS == 'x':
-        ax.set_title("XSec_{0}, x = {1} {2}".format(
-            i, round(locs[i] - locs[0] + START_POS, 3), UNIT))
-        ax.set_xlabel("y, {0}".format(UNIT))
-        ax.set_ylabel("z, {0}".format(UNIT))
-    else:
-        ax.set_title("XSec {0}, y = {1} {2}".format(
-            i, round(locs[i] - locs[0] + START_POS, 3), UNIT))
-        ax.set_xlabel("x, {0}".format(UNIT))
-        ax.set_ylabel("z, {0}".format(UNIT))
-
-    plot_array = np.vstack((sorted_xsec_array, sorted_xsec_array[0, :]))
-    ax.plot(plot_array[:, 0], plot_array[:, 1], alpha=1)
-
-
-# %% Export XSecs as DXF
-
-    doc = ezdxf.new('R12')
-    msp = doc.modelspace()
-    for k in range(int(np.size(sorted_xsec_array, 0))-1):
-        msp.add_line(sorted_xsec_array[k], sorted_xsec_array[k+1])
-    msp.add_line(sorted_xsec_array[-1], sorted_xsec_array[0])
-
-    msp.add_line((0.2, 0.2), (0.2, -0.2))
-    msp.add_line((0.2, -0.2), (-0.2, -0.2))
-    msp.add_line((-0.2, -0.2), (-0.2, 0.2))
-    msp.add_line((-0.2, 0.2), (0.2, 0.2))
-
-    doc.saveas(DXF_EXPORT_DIR + "XSec_{0}.dxf".format(i))
-
-# %% Export XSecs as PNG
-
-    # fig = plt.figure(dpi=DPI)
     # ax = fig.add_subplot(111)
-    # ax.grid(False)
-    # ax.axis(False)
     # ax.axis('equal')
+    # if NORMAL_AXIS == 'x':
+    #     ax.set_title("XSec_{0}, x = {1} {2}".format(
+    #         i+1, round(locs[i] - locs[0] + START_POS, 3), UNIT))
+    #     ax.set_xlabel("y, {0}".format(UNIT))
+    #     ax.set_ylabel("z, {0}".format(UNIT))
+    # else:
+    #     ax.set_title("XSec {0}, y = {1} {2}".format(
+    #         i, round(locs[i] - locs[0] + START_POS, 3), UNIT))
+    #     ax.set_xlabel("x, {0}".format(UNIT))
+    #     ax.set_ylabel("z, {0}".format(UNIT))
 
     # plot_array = np.vstack((sorted_xsec_array, sorted_xsec_array[0, :]))
     # ax.plot(plot_array[:, 0], plot_array[:, 1], alpha=1)
 
-    # height = np.max(sorted_xsec_array[:, 1]) - np.min(sorted_xsec_array[:, 1])
-    # width = np.max(sorted_xsec_array[:, 0]) - np.min(sorted_xsec_array[:, 0])
 
-    # ax.hlines(0, -width/2, width/2, linestyle="dashed", color="red")
-    # ax.vlines(0, -height/2, height/2, linestyle="dashed", color="red")
+# # %% Export XSecs as DXF
 
-    # ax.hlines(height/2, -width/2, width/2, linestyle="dotted", color="blue")
-    # ax.hlines(-height/2, -width/2, width/2, linestyle="dotted", color="blue")
+#     doc = ezdxf.new('R12')
+#     msp = doc.modelspace()
+#     for k in range(int(np.size(sorted_xsec_array, 0))-1):
+#         msp.add_line(sorted_xsec_array[k], sorted_xsec_array[k+1])
+#     msp.add_line(sorted_xsec_array[-1], sorted_xsec_array[0])
 
-    # fig.savefig(PNG_EXPORT_DIR + "XSec_{0}.png".format(i),
-    #     format="png", bbox_inches="tight")
+#     msp.add_line((0.2, 0.2), (0.2, -0.2))
+#     msp.add_line((0.2, -0.2), (-0.2, -0.2))
+#     msp.add_line((-0.2, -0.2), (-0.2, 0.2))
+#     msp.add_line((-0.2, 0.2), (0.2, 0.2))
+
+#     doc.saveas(DXF_EXPORT_DIR + "XSec_{0}.dxf".format(i+1))
+
+# %% Export XSecs as PNG
+
+    fig = plt.figure(dpi=DPI)
+    ax = fig.add_subplot(111)
+    ax.grid(False)
+    ax.axis(False)
+    ax.axis('equal')
+
+    plot_array = np.vstack((sorted_xsec_array, sorted_xsec_array[0, :]))
+    ax.plot(plot_array[:, 0], plot_array[:, 1], alpha=1)
+
+    height = np.max(sorted_xsec_array[:, 1]) - np.min(sorted_xsec_array[:, 1])
+    width = np.max(sorted_xsec_array[:, 0]) - np.min(sorted_xsec_array[:, 0])
+
+    ax.hlines(0, -width/2, width/2, linestyle="dashed", color="red", lw=0.25)
+    ax.vlines(0, -height/2, height/2, linestyle="dashed", color="red", lw=0.25)
+
+    ax.hlines(height/2, -width/2, width/2, linestyle="dotted", color="blue", lw=0.25)
+    ax.hlines(-height/2, -width/2, width/2, linestyle="dotted", color="blue", lw=0.25)
+
+    fig.savefig(PNG_EXPORT_DIR + "XSec_{0}.png".format(i+1),
+        format="png", bbox_inches="tight")
